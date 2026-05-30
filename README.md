@@ -2,7 +2,9 @@
 
 A simple desktop farm planner for Stardew Valley. Built as a personal project — 
 part learning experience, part proof that being too into Stardew Valley 
-can actually teach you how to code. 🌱
+can actually teach you how to code.
+
+> Vibe coded.
 
 ## Features
 - Place sprinklers (Normal, Quality, Iridium)
@@ -19,4 +21,4 @@ can actually teach you how to code. 🌱
 - Electron
 
 ---
-*More features coming soon... if I'm not too lazy.* 
+*More features coming soon... if I'm not too lazy.*
