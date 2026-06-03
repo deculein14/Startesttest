@@ -12,7 +12,11 @@ document.getElementById('load-btn');
 const clearBtn =
 document.getElementById('clear-btn');
 
+const toggleRangeBtn =
+document.getElementById('toggle-range-btn');
+
 let currentTool = 'scarecrow';
+let rangesVisible = true;
 
 const GRID_WIDTH = 40;
 const GRID_HEIGHT = 30;
@@ -23,6 +27,99 @@ const allTools = [
     'quality-sprinkler',
     'iridium-sprinkler'
 ];
+
+/* UNDO/REDO HISTORY */
+
+let history = [];
+let historyIndex = -1;
+
+function saveHistory() {
+
+    const cells =
+    document.querySelectorAll('.cell');
+
+    const snapshot = [];
+
+    cells.forEach(cell => {
+
+        let type = null;
+
+        allTools.forEach(tool => {
+
+            if (cell.classList.contains(tool)) {
+                type = tool;
+            }
+
+        });
+
+        snapshot.push(type);
+
+    });
+
+    /* REMOVE ANY REDO STATES */
+
+    history = history.slice(0, historyIndex + 1);
+
+    history.push(snapshot);
+
+    historyIndex++;
+
+}
+
+function restoreHistory(snapshot) {
+
+    const cells =
+    document.querySelectorAll('.cell');
+
+    cells.forEach((cell, i) => {
+
+        clearCell(cell);
+
+        if (snapshot[i]) {
+            cell.classList.add(snapshot[i]);
+        }
+
+    });
+
+    updateRanges();
+
+}
+
+function undo() {
+
+    if (historyIndex <= 0) return;
+
+    historyIndex--;
+
+    restoreHistory(history[historyIndex]);
+
+}
+
+function redo() {
+
+    if (historyIndex >= history.length - 1) return;
+
+    historyIndex++;
+
+    restoreHistory(history[historyIndex]);
+
+}
+
+/* KEYBOARD SHORTCUTS */
+
+document.addEventListener('keydown', (e) => {
+
+    if (e.ctrlKey && e.key === 'z') {
+        e.preventDefault();
+        undo();
+    }
+
+    if (e.ctrlKey && e.key === 'y') {
+        e.preventDefault();
+        redo();
+    }
+
+});
 
 /* CREATE GRID */
 
@@ -43,6 +140,8 @@ for (
 
     cell.addEventListener('click', () => {
 
+        saveHistory();
+
         clearCell(cell);
 
         cell.classList.add(currentTool);
@@ -55,6 +154,8 @@ for (
 
     cell.addEventListener('dblclick', () => {
 
+        saveHistory();
+
         clearCell(cell);
 
         updateRanges();
@@ -64,6 +165,10 @@ for (
     grid.appendChild(cell);
 
 }
+
+/* SAVE INITIAL EMPTY STATE */
+
+saveHistory();
 
 /* TOOL SWITCH */
 
@@ -83,6 +188,28 @@ toolButtons.forEach(button => {
         button.dataset.tool;
 
     });
+
+});
+
+/* TOGGLE RANGE */
+
+toggleRangeBtn.addEventListener('click', () => {
+
+    rangesVisible = !rangesVisible;
+
+    toggleRangeBtn.textContent =
+    rangesVisible ? 'Hide Range' : 'Show Range';
+
+    toggleRangeBtn.classList.toggle(
+    'ranges-hidden',
+    !rangesVisible
+    );
+
+    if (rangesVisible) {
+        updateRanges();
+    } else {
+        clearRanges();
+    }
 
 });
 
@@ -138,6 +265,8 @@ function clearRanges() {
 /* scarecrow first, sprinklers last so they show on top */
 
 function updateRanges() {
+
+    if (!rangesVisible) return;
 
     clearRanges();
 
@@ -541,6 +670,8 @@ loadBtn.addEventListener('click', () => {
 
             });
 
+            saveHistory();
+
             updateRanges();
 
         };
@@ -565,6 +696,8 @@ clearBtn.addEventListener(
     );
 
     if (!confirmClear) return;
+
+    saveHistory();
 
     document
     .querySelectorAll('.cell')

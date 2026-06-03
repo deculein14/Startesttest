@@ -94,9 +94,18 @@ button[data-tool="iridium-sprinkler"]::before{
     background:#f44336;
 }
 
+#toggle-range-btn{
+    background:#9C27B0;
+}
+
+#toggle-range-btn.ranges-hidden{
+    background:#616161;
+}
+
 #save-btn::before,
 #load-btn::before,
-#clear-btn::before{
+#clear-btn::before,
+#toggle-range-btn::before{
     display:none;
 }
 
@@ -182,6 +191,10 @@ button[data-tool="iridium-sprinkler"]::before{
 
     <button id="load-btn">
     Load Layout
+    </button>
+
+    <button id="toggle-range-btn">
+    Hide Range
     </button>
 
     <button id="clear-btn">
