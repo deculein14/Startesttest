@@ -21,4 +21,4 @@ part learning experience, part proof that being too into Stardew Valley can actu
 - Electron
 
 ---
-*More features coming soon... if I'm not too lazy.*
+*Shit*
