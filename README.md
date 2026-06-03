@@ -9,7 +9,8 @@ part learning experience, part proof that being too into Stardew Valley can actu
 - Place sprinklers (Normal, Quality, Iridium)
 - Place scarecrows
 - Automatically shows coverage range
-- Erase and clear tools
+- Save and load your farm layout
+- Clear all tool
 
 ## How to Run
 1. Install dependencies: `npm install`
